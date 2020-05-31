@@ -1,0 +1,15 @@
+rule all:
+    input: expand('input/{file}')
+    output: expand(output/{file in range(1, 4))}
+
+rule generate:
+    input: 'input/{file}'
+    output: 'output/{file}'
+    run:
+        with open(f'{input}', "r") as inp, open(f'{output}', "w") as out:
+            result = {}
+            for line in inp:
+                for i in line.rstrip('\n'):
+                    result[i] = line.count(i)
+            for key, value in sorted(result.items()):
+                out.write(key + ": " + str(value) + '\n')
